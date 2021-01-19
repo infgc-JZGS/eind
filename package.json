@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "colors": "^1.4.0",
     "ejs": "^3.1.5",
     "fastify": "^3.9.2",
     "ws": "^7.4.1"
