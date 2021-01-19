@@ -2,21 +2,29 @@ const Server = require('fastify')();
 const fs = require('fs');
 const ejs = require('ejs');
 
+
+
+Server.decorateReply('view', function (path, options) {
+  file = fs.readFileSync(path, 'utf-8');
+  page = ejs.render(file, options);
+
+  this.type('text/html');
+  this.send(page);
+});
+
+
+
 Server.get('/', async (request, reply) => {
-  page = fs.readFileSync('views/test.html', 'utf-8');
-  reply.type('text/html');
-  reply.send(page);
+  reply.view('views/test.html');
 });
 
 Server.get('/ip', async (request, reply) => {
-  file = fs.readFileSync('views/test.ejs', 'utf-8');
-  page = ejs.render(file, {
+  reply.view('views/test.ejs', {
     ip: request.ip,
   });
-
-  reply.type('text/html');
-  reply.send(page);
 });
+
+
 
 Server.listen(3000, (err, addr) => {
   if (err) throw err;
