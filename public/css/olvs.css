@@ -1,0 +1,203 @@
+#logopt1 {
+  margin: 0px;
+  height: 15vw;
+  width: 15vw;
+  border-style: solid;
+  border-width: 0.225vw;
+  border-color: whitesmoke;
+  transition: 2s;
+}
+
+#logopt2 {
+  height: 11.25vw;
+  width: 11.25vw;
+  margin: -8.1vw 1.65vw 1.65vw -8.1vw;
+  border-style: solid none solid solid;
+  border-width: 0.225vw;
+  border-color: whitesmoke;
+  border-radius: 59%;
+  border-top: 0.225vw solid transparent;
+  border-left: 0.225vw solid whitesmoke;
+  border-right: 0.225vw solid whitesmoke;
+  border-bottom: 0.225vw solid whitesmoke;
+  transform: rotate(67.5deg);
+  transition: 2s;
+  transition-delay: 1.5s;
+}
+
+#logopt3 {
+  height: 11.25vw;
+  width: 11.25vw;
+  margin: -0.225vw 0px 0px -0.225vw;
+  padding: 0px;
+  border-style: solid none solid solid;
+  border-width: 0.225vw;
+  border-color: whitesmoke;
+  border-radius: 59%;
+  border-top: 0.225vw solid transparent;
+  border-left: 0.225vw solid whitesmoke;
+  border-right: 0.225vw solid whitesmoke;
+  border-bottom: 0.225vw solid whitesmoke;
+  transform: rotate(45deg);
+  transition: 2s;
+  transition-delay: 1.5s;
+}
+
+#logopt4 {
+  height: 11.25vw;
+  width: 11.25vw;
+  margin: -6.125vw 0px 0px 0.5vw;
+  transition: 2s;
+  transition-delay: 1.5s;
+}
+
+#logopt5 {
+  height: 3vw;
+  width: 3vw;
+  border-style: solid solid none none;
+  border-color: whitesmoke;
+  border-width: 0.225vw;
+  margin: -5.25vw 0px 0px 9.75vw;
+  transform: rotate(350deg);
+  transition: 2s;
+  transition-delay: 1.5s;
+}
+
+#logo {
+  margin: 2vw 0px 0px 0.5vw;
+  transition: 2s;
+  width: 40vw;
+}
+
+#logotitle {
+  margin-left: 16vw;
+  height: 15vw;
+  width: 25vw;
+  color: whitesmoke;
+  font-size: 4vw;
+  transition: 2s;
+  transition-delay: 1s;
+}
+
+#content {
+  top: 0px;
+  height: 100vh;
+  background-image: linear-gradient(to right, rgb(255, 0, 0), rgb(48, 68, 103));
+  background-repeat: none;
+  width: 100%;
+  color: whitesmoke;
+}
+
+#top {
+  height: 1px;
+}
+
+#header {
+  width: 40%;
+  height: auto;
+  margin: 5px 30% 5px 30%;
+  padding: 0px;
+}
+
+#headerlogo {
+  width: 100%;
+  height: auto;
+  margin: 0px;
+}
+
+#headerlogo img {
+  width: 100%;
+  height: auto;
+}
+
+#headertitle {
+  text-align: center;
+  font-size: 1.6vw;
+}
+
+#login {
+  width: 40%;
+  height: auto;
+  margin: 1% 30% 0px 30%;
+  border-style: solid;
+  border-width: 2px;
+  border-color: white;
+  border-radius: 10px;
+  transition: 2s;
+}
+
+#logintitle {
+  text-align: center;
+  font-size: 4.4vw;
+  transition: 2s;
+}
+
+#loginform {
+  margin: 5%;
+  font-size: 3vw;
+  transition: 2s;
+}
+
+#loginform input {
+  font-size: 2vw;
+  position: center;
+  width: 96%;
+  border: none;
+  margin: 0px;
+  padding: 2% 2% 2% 2%;
+  transition: 2s;
+}
+
+#loginform button {
+  margin: 0px 2% 0px 48%;
+  padding: 0px 2%;
+  width: 50%;
+  font-size: 2vw;
+  background-color: white;
+  transition: 2s;
+}
+
+#loginform button:hover {
+  cursor: pointer;
+  background-color: rgb(245, 168, 143);
+}
+
+* {
+  margin: 0px;
+  pading: 0px;
+}
+
+@media only screen and (max-width: 900px) {
+  #header {
+    width: 90%;
+    margin: 5px 5% 5px 5%;
+  }
+
+  #headertitle {
+    font-size: 3.6vw;
+  }
+
+  #login {
+    width: 90%;
+    margin: 1% 5% 0px 5%;
+  }
+
+  #logintitle {
+    font-size: 5vw;
+  }
+
+  #loginform {
+    font-size: 4vw;
+  }
+
+  #loginform input {
+    font-size: 3vw;
+    margin: 2% 0px;
+  }
+
+  #loginform button {
+    margin: 4% 2% 0px 2%;
+    width: 96%;
+    font-size: 3vw;
+  }
+}
