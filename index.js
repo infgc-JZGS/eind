@@ -13,20 +13,24 @@ fastify.register(require('fastify-formbody'));
 
 
 
-Bcrypt.compareAll = async (data, hashes) => {
-  for (const hash of hashes) {
-    if (await Bcrypt.compare(data, hash)) return true;
-  }
-  return false
-}
-
-
 fastify.decorateReply('view', function (path, options) {
   file = fs.readFileSync(path, 'utf-8');
   page = ejs.render(file, options);
 
   this.type('text/html');
   this.send(page);
+});
+
+
+fastify.decorateRequest('auth', async function () {
+  const res = await fastify.db(`SELECT * FROM logins WHERE user = '${this.cookies.user}'`);
+  if (res.status == 'failed') console.log(res);
+  return (res.status == 'success' && res.data.length && await (async () => {
+    for (const login of res.data) {
+      if (await Bcrypt.compare(this.cookies.token, login.hash)) return true;
+    }
+    return false;
+  })() )
 });
 
 
@@ -44,37 +48,68 @@ fastify.decorate('db', async function (query) {
 
 
 fastify.get('/', async (request, reply) => {
-  const res = await fastify.db(`SELECT * FROM logins WHERE user = '${request.cookies.user}'`);
-  if (res.status == 'failed') console.log(res);
-  if(res.status == 'success' && res.data.length && await Bcrypt.compareAll(request.cookies.token, res.data)) {
+  if (request.auth()) {
     reply.redirect('/feed');
+  } else {
+    reply.redirect('/login');
   }
-
-  reply.view(Path.join(__dirname, 'views/login.ejs'));
 });
 
 
 fastify.get('/feed', async (request, reply) => {
-  const res = await fastify.db(`SELECT * FROM logins WHERE user = '${request.cookies.user}'`);
-  if (res.status == 'failed') console.log(res);
-  if(res.status == 'success' && res.data.length && await Bcrypt.compareAll(request.cookies.token, res.data)) {
+  if (request.auth()) {
     reply.view(Path.join(__dirname, 'views/feed.ejs'));
   } else {
     reply.redirect('/');
-  }
-
-  
+  }  
 });
+
+
+fastify.get('/login', async (request, reply) => {
+  if (!request.auth()) {
+    reply.view(Path.join(__dirname, 'views/login.ejs'));
+  } else {
+    reply.redirect('/feed');
+  }
+})
 
 
 fastify.post('/login', async (request, reply) => {
   const res = await fastify.db(`SELECT * FROM users WHERE username = '${request.body.username}'`);
-  if(res.status == 'success' && await Bcrypt.compare(request.body.password, res.data.password)) {
+  if(res.status == 'success' && await Bcrypt.compare(request.body.password, res.data[0].password)) {
     const token = Math.random().toString(16).substr(2, 16);
-    //hash token
-    await fastify.db(`INSERT INTO logins (user, token) VALUES ('${res.data.id}', '${hash}')`)
+    const hash = await Bcrypt.hash(token, 8);
+
+    const insert = await fastify.db(`INSERT INTO logins (user, hash) VALUES ('${res.data[0].id}', '${hash}')`);
+    console.log(insert);
+
+    // cookieOptions = {};
+    // if (request.body.keep) cookieOptions.maxAge = 3600*24*365;
+    reply.setCookie('user', res.data[0].id);
+    reply.setCookie('token', token);
+    reply.redirect('/feed');
+  } else {
+    reply.view(Path.join(__dirname, 'views/login.ejs'));
   }
-  reply.redirect('/');
+});
+
+
+fastify.get('/signup/:code', async (request, reply) => {
+  reply.view(Path.join(__dirname, 'views/signup.ejs'));
+})
+
+
+fastify.post('/signup/:code', async (request, reply) => {
+  const res = await fastify.db(`SELECT * FROM codes WHERE code = '${request.params.code}'`);
+  if (res.status == 'success' && res.data.length) {
+    if (request.body.password != request.body.passwordverify) {
+      reply.view(Path.join(__dirname, 'views/signup.ejs'));
+    } else {
+      const hash = await Bcrypt.hash(request.body.password, 8);
+      await fastify.db(`INSERT INTO users (username, fullname, password, type) VALUES ('${request.body.username}', '${res.data[0].fullname}', '${hash}', '${res.data[0].type}')`);
+      reply.redirect('/login');
+    }
+  }
 });
 
 
